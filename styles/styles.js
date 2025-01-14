@@ -1,0 +1,71 @@
+import { StyleSheet } from 'react-native';
+
+export const globalStyles = StyleSheet.create({
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#9FC63B',
+    marginBottom: 20,
+  },
+  container: {
+    alignContent: 'center',
+    flex: 1,
+    backgroundColor: '#23272A',
+    padding: 40,
+    paddingTop: 60,
+    paddingBottom: 60,
+    justifyContent: 'center',
+  },
+  text: {
+    color: '#FFFFFF',
+    fontSize: 14,
+  },
+  button: {
+    alignContent: 'center',
+    width: '50%',
+    borderWidth: 2,
+    borderColor: '#9FC63B',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 15,
+    alignSelf: 'center',
+  },
+  buttonLogin:{
+    alignContent: 'center',
+    width: '50%',
+    backgroundColor: '#9FC63B',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 15,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#FFFFFF',
+    color: '#868686',
+    fontSize: 14,
+    marginVertical: 8,
+    paddingVertical: 6,
+  },
+  inputLogin: {
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    color: '#868686',
+    fontSize: 14,
+    marginVertical: 8,
+    paddingVertical: 12,
+    backgroundColor: '#323639',
+},
+  imageBackground: {
+    height: '50%',
+    width: '100%',
+    resizeMode: 'cover',
+  },
+});
