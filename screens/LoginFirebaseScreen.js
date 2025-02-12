@@ -20,7 +20,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={globalStyles.logContainer}>
       <ImageBackground source={vedrunaBG} style={[globalStyles.imageBackground, { width: '100%', height: 300, marginBottom: 150 }]}></ImageBackground>
       <View style={globalStyles.inputsContainer}>
           <Text style={[globalStyles.title, { marginTop: -150, color: '#FFFFFF', fontSize: 50, position: 'absolute', justifyContent: 'center' }]}>VEDRUNA EDUCACION</Text>

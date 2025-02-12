@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
+import { Image,View, Text, TouchableOpacity, Alert, TextInput } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'; 
 import { auth } from '../../firebase'; 
 import { globalStyles } from '../../styles/styles'; 
+import imagene from '../../assets/selectImage.png';
 
 const AñadirPublicacionScreen = () => {
   const [titulo, setTitulo] = useState('');
@@ -53,7 +54,7 @@ const AñadirPublicacionScreen = () => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
+        aspect: [4, 4],
         quality: 0.5,
       });
 
@@ -128,25 +129,28 @@ const AñadirPublicacionScreen = () => {
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Añadir Publicación</Text>
+    <View style={globalStyles.logContainer}>
+      <Text style={globalStyles.title}>                       PUBLICACION</Text>
+      <TouchableOpacity style={globalStyles.button} onPress={selectImage}>
+        <Image source={imagene} style={globalStyles.buttonImage} />
+      </TouchableOpacity>
+      <View style={globalStyles.inputContainer}>
+      <Text style={globalStyles.title}>Titulo</Text>
       <TextInput
-        placeholder="Título"
+        placeholder="Máx. 40 caracteres"
         value={titulo}
         onChangeText={setTitulo}
-        style={globalStyles.input}
+        style={globalStyles.titleInput}
       />
+      <Text>{"\n"}</Text>
+      <Text style={globalStyles.title}>Descripción</Text>
       <TextInput
-        placeholder="Comentario"
+      placeholder="Máx. 250 caracteres"
         value={comentario}
         onChangeText={setComentario}
-        style={globalStyles.input}
+        style={globalStyles.commentInput}
       />
-      <TouchableOpacity style={globalStyles.button} onPress={selectImage}>
-        <Text style={globalStyles.buttonText}>Seleccionar Imagen</Text>
-      </TouchableOpacity>
-      <Text>{imageUrl ? 'Imagen seleccionada' : 'No se ha seleccionado ninguna imagen'}</Text>
-
+      </View>
       <TouchableOpacity style={globalStyles.button} onPress={handleSubmit}>
         <Text style={globalStyles.buttonText}>Publicar</Text>
       </TouchableOpacity>

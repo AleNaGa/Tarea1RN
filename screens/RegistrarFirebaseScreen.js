@@ -65,7 +65,7 @@ const Register = ({ navigation }) => {
   };
 
   return (
-    <View style={globalStyles.container}>
+    <View style={globalStyles.logContainer}>
       <ImageBackground source={formBG} style={globalStyles.imageBackground} />
 
       <Text style={[globalStyles.title, { marginTop: -120, marginBottom: 50 }]}>Completar los siguientes campos</Text>

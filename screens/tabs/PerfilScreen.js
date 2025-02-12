@@ -82,6 +82,7 @@ const PerfilScreen = () => {
 
   return (
     <View style={styles.container}>
+      z<Viw
       <Image source={{ uri: userData.profile_picture }} style={styles.profileImage} />
       <Text style={styles.nick}>{userData.nick}</Text>
 
@@ -100,7 +101,7 @@ const PerfilScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Mostrar publicaciones dependiendo del estado */}
+      
       <FlatList
         data={showLiked ? likedPublications : publications}
         renderItem={({ item }) => (

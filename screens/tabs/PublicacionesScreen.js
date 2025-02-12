@@ -57,6 +57,17 @@ const PublicacionesScreen = ({ navigation }) => {
     }, [])
   );
 
+  const setDate = (date) => {
+    const createdAt = new Date(date);
+    const now = new Date();
+    
+    //conversion a milisegundos y dividir por 1000
+    const differenceInTime = now - createdAt;
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 60 * 60 * 24));
+  
+    return differenceInDays === 0 ? "Hoy" : `Hace ${differenceInDays} días`;
+  };
+
   const toggleLike = async (postId, isLiked) => {
     try {
       const response = await fetch(`http://192.168.150.157:8080/proyecto01/publicaciones/put/${postId}/${userId}`, {
@@ -84,35 +95,41 @@ const PublicacionesScreen = ({ navigation }) => {
 
   const renderItem = ({ item }) => {
     const usuario = usuarios[item.userid];
+    const createdDate = setDate(item.createdAt);
 
     return (
       <View style={globalStyles.card}>
-        <View style={styles.userContainer}>
-          <Image source={{ uri: usuario?.profile_picture }} style={styles.profileImage} />
-          <Text style={styles.nick}>{usuario?.nick || 'Usuario desconocido'}</Text>
+        <View style={globalStyles.userContainer}>
+          <Image source={{ uri: usuario?.profile_picture }} style={globalStyles.profileImage} />
+          <View style={globalStyles.userTextContainer}>
+            <Text style={globalStyles.text}>Publicado por:</Text>
+            <Text style={globalStyles.nickB}>{usuario?.nick || 'Usuario desconocido'}</Text>
+            <Text style={globalStyles.text}>{createdDate}</Text>
+          </View>
         </View>
 
         <TouchableOpacity onPress={() => navigation.navigate('PublicacionDetail', { publicacion: item, usuario })}>
-          <Image source={{ uri: item.image_url }} style={styles.postImage} />
+          <Image source={{ uri: item.image_url }} style={globalStyles.postImage} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.likeContainer} onPress={() => toggleLike(item.id, item.likedByUser)}>
-          <Ionicons name={item.likedByUser ? 'heart' : 'heart-outline'} size={28} color={item.likedByUser ? 'red' : 'black'} />
-          <Text style={styles.likeText}>{item.like?.length || 0} me gusta</Text>
+        <TouchableOpacity style={globalStyles.likeContainer} onPress={() => toggleLike(item.id, item.likedByUser)}>
+          <Ionicons name={item.likedByUser ? 'heart' : 'heart-outline'} size={28} color={item.likedByUser ? 'red' : '#868686'} />
+          <Text style={globalStyles.likeText}> {item.like?.length || 0} me gusta</Text>
         </TouchableOpacity>
-
+      <View style={globalStyles.postText}>
         <Text style={globalStyles.title}>{item.titulo}</Text>
         <Text style={globalStyles.text}>{item.comentario}</Text>
+      </View>
       </View>
     );
   };
 
   return (
     <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Publicaciones</Text>
+      <Image source={require('../../assets/homeLogo.png')} style={globalStyles.logo} />
 
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="#9FC63B" />
       ) : (
         <FlatList data={publicaciones} keyExtractor={(item) => item.id} renderItem={renderItem} />
       )}
@@ -121,36 +138,7 @@ const PublicacionesScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  userContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 10,
-  },
-  nick: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  postImage: {
-    width: '100%',
-    height: 200,
-    borderRadius: 10,
-    marginTop: 5,
-  },
-  likeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
-  },
-  likeText: {
-    fontSize: 16,
-    marginLeft: 5,
-  },
+  
 });
 
 export default PublicacionesScreen;
