@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ActivityIndicator, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { auth } from '../../firebase'; // Asegúrate de que esta importación esté correcta.
+import { auth } from '../../firebase'; 
+import { getAuth } from 'firebase/auth';
+import { globalStyles } from '../../styles/styles';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+
 
 const USER_URL = 'http://192.168.150.157:8080/proyecto01/users/';
 const PUB_URL = 'http://192.168.150.157:8080/proyecto01/publicaciones/byUser/';
@@ -12,10 +17,23 @@ const PerfilScreen = () => {
   const [loading, setLoading] = useState(true);
   const [publications, setPublicaciones] = useState([]);
   const [likedPublications, setLikedPublications] = useState([]);
-  const [showLiked, setShowLiked] = useState(false); // Estado para controlar qué publicaciones mostrar
+  const [showLiked, setShowLiked] = useState(false); 
+  const [userEmail, setUserEmail] = useState('');
 
   const user = auth.currentUser;
 
+
+  const getCurrentUserEmail = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    
+    if (user) {
+      console.log('Correo electrónico del usuario:', user.email);
+      return user.email; 
+    } else {
+      console.log('No hay un usuario autenticado');
+    }
+  };
   const getPublications = async (userId) => {
     try {
       const response = await fetch(`${PUB_URL}${userId}`);
@@ -53,7 +71,7 @@ const PerfilScreen = () => {
             setLoading(false);
           }
         };
-
+        setUserEmail(getCurrentUserEmail());
         fetchUserData();
       } else {
         setLoading(false);
@@ -81,33 +99,50 @@ const PerfilScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      z<Viw
-      <Image source={{ uri: userData.profile_picture }} style={styles.profileImage} />
-      <Text style={styles.nick}>{userData.nick}</Text>
-
+    <View style={globalStyles.container}>
+      <View style={styles.containerPFP}>
+      <View style={styles.profileContainer}>
+        <Image source={{ uri: userData.profile_picture }} style={styles.profileImage} />
+        <View style={styles.followers}>
+          <Text style={styles.followersText}>      {publications.length}</Text>
+          <Text style={styles.followersText2}>Publicaciones</Text>
+        </View>
+        <View style={styles.followers}>
+          <Text style={styles.followersText}>   10</Text>
+          <Text style={styles.followersText2}>  Seguidores</Text>
+        </View>
+        <View style={styles.followers}>
+          <Text style={styles.followersText}>40</Text>
+          <Text style={styles.followersText2}>Seguidos</Text>
+        </View>
+      </View>
+      <Text></Text>
+      <View style={styles.nickContainer}>
+        <Text style={globalStyles.title}>{userData.nick}</Text>
+        <Text style={globalStyles.likeText}>{userEmail}</Text>
+      </View>
+      </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
-          style={[styles.button, !showLiked && styles.activeButton]} 
+          style={[!showLiked && styles.activeButton]} 
           onPress={() => setShowLiked(false)}
         >
-          <Text style={styles.buttonText}>Mis Publicaciones</Text>
+          <Ionicons name="grid" size={60} color="#868686"/>
         </TouchableOpacity>
         <TouchableOpacity 
-          style={[styles.button, showLiked && styles.activeButton]} 
+          style={[showLiked && styles.activeButton]} 
           onPress={() => setShowLiked(true)}
         >
-          <Text style={styles.buttonText}>Publicaciones que me gustan</Text>
+          <Ionicons name="heart" size={60} color="#868686"/>
         </TouchableOpacity>
       </View>
-
       
       <FlatList
         data={showLiked ? likedPublications : publications}
+        numColumns={4}
         renderItem={({ item }) => (
           <View style={styles.publicationContainer}>
             <Image source={{ uri: item.image_url }} style={styles.publicationImage} />
-            <Text style={styles.nick}>{item.titulo}</Text>
           </View>
         )}
         keyExtractor={(item) => item.id.toString()}
@@ -117,27 +152,55 @@ const PerfilScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  followers: {
+    width: 90,
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+    
+  },
+  followersText: {
+    marginLeft: 20,
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#FFFF',
+  },
+  followersText2: {
+    fontSize: 15,
+    color: 'grey',
+  },
+  containerPFP:{
+    padding:40,
+  },
+  profileContainer: {
+    flexDirection: 'row',
+  },
   container: {
     padding: 20,
-    alignItems: 'center',
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: 80,
+    height: 80,
+    borderRadius: 80,
+    borderWidth: 3,
+    borderColor: '#9FC63B',
+    marginRight: 10,
+    resizeMode: 'cover',
+    aspectRatio:1,
   },
   nick: {
     fontSize: 20,
     fontWeight: 'bold',
   },
   publicationContainer: {
-    marginBottom: 20,
+    width: '25%',
+    aspectRatio: 1,
+
   },
   publicationImage: {
     width: '100%',
-    height: 200,
-    borderRadius: 10,
+    height: '100%',
+    resizeMode: 'cover',
   },
   loadingText: {
     fontSize: 16,
@@ -151,6 +214,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
     marginVertical: 10,
   },
   button: {
